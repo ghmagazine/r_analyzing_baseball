@@ -1,0 +1,48 @@
+## Errata from the 2nd edition
+## May 2020
+
+
+1.  Page 17, top line. Manny Alexander (not Chris Hoiles) played second base
+    On page 18, the description for Table 1.6 says September 9, 1995. It should be September 6, 1995.
+
+
+2.  Page 27, line 5. In the first answer “median launch speed” should be “median launch angle”.
+
+3.  Page 52, code at the bottom. The "crcblue" color is not defined.  
+It is defined by crcblue <- "#2905a1".  This change is included in the global_config.R file in the chapter_code folder.
+ 
+4.  Page 59: First sentence of 2.10.1.  Replace “… operation to over a sequence of inputs” with “… operation over a sequence of inputs” .
+
+5.  Page 147: Figure 6.2: The strike values 012 are not placed under their tick marks.
+
+6.  Page 165, top paragraph.  The definition of a called strike as type = "S" is incorrect.  
+The des variable indicates the result of the pitch.  The values "Ball", "Ball in Dirt", 
+"Called Strike", "Intent Ball",  "Pitchout" are when the batter does not swing 
+and we are interested in the "Called Strike" outcome for these no-swing pitches.  This 
+error impacts the results in the remainder of this chapter.
+
+7.  Page 209:  We didn't copy the runs expectancy values from Chapter 5 correctly.  Here are the correct values and the updated values of RE - RE_bat:
+
+RE <- matrix(
+c(0.50, 0.27, 0.11, 1.35, 0.94, 0.37,
+1.13, 0.67, 0.31, 1.93, 1.36, 0.55,
+0.86, 0.51, 0.22, 1.72, 1.20, 0.48,
+1.44, 0.92, 0.41, 2.11, 1.54, 0.70),
+8, 3, byrow = TRUE)
+
+round(RE - RE_bat, 2)
+
+    0 outs 1 out 2 outs
+000   0.02  0.01   0.01
+001   0.03  0.02   0.03
+010  -0.01  0.03   0.01
+011   0.00  0.06   0.08
+100   0.00  0.01   0.01
+101   0.01  0.06   0.06
+110   0.05  0.05   0.00
+111  -0.08  0.08   0.03
+
+8.  Page 222: In top paragraph, Detroit did not make the World series in this simulation.
+
+
+
