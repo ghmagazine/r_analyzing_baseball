@@ -1,7 +1,7 @@
+# 4章
 library(tidyverse)
 library(Lahman)
 tail(Teams, 3)
-
 my_teams <- Teams %>%
   filter(yearID > 2000) %>%
   select(teamID, yearID, lgID, G, W, L, R, RA)
@@ -14,9 +14,10 @@ run_diff <- ggplot(my_teams, aes(x = RD, y = Wpct)) +
   geom_point() +
   scale_x_continuous("Run differential") +
   scale_y_continuous("Winning percentage")
+
 linfit <- lm(Wpct ~ RD, data = my_teams)
 linfit
-crcblue <- "#2905a1" #add
+crcblue <- "#2905a1"
 run_diff +
   geom_smooth(method = "lm", se = FALSE, color = crcblue)
 
@@ -29,12 +30,12 @@ base_plot <- ggplot(my_teams_aug, aes(x = RD, y = .resid)) +
 highlight_teams <- my_teams_aug %>%
   arrange(desc(abs(.resid))) %>%
   head(4)
+
 library(ggrepel)
 base_plot +
   geom_point(data = highlight_teams, color = crcblue) +
   geom_text_repel(data = highlight_teams, color = crcblue,
                   aes(label = paste(teamID, yearID)))
-
 resid_summary <- my_teams_aug %>%
   summarize(N = n(), avg = mean(.resid),
             RMSE = sqrt(mean(.resid^2)))
@@ -100,6 +101,7 @@ ggplot(data = teams2011, aes(x = one_run_w, y = residuals_pyt)) +
   geom_point() +
   geom_text_repel(aes(label = teamID)) +
   xlab("One run wins") + ylab("Pythagorean residuals")
+
 top_closers <- Pitching %>%
   filter(GF > 50 & ERA < 2.5) %>%
   select(playerID, yearID, teamID)
@@ -108,8 +110,6 @@ my_teams %>%
   pull(residuals_pyt) %>%
   summary()
 D(expression(G * R ^ 2 / (R ^ 2 + RA ^ 2)), "R")
-G * (2 * R)/(R^2 + RA^2) - G * R^2 * (2 * R)/(R^2 + RA^2)^2
-
 IR <- function(RS = 5, RA = 5){
   (RS ^ 2 + RA ^ 2)^2 / (2 * RS * RA ^ 2)
 }

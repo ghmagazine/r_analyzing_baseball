@@ -1,25 +1,32 @@
-install.packages("tidyverse") #add
+# 2章
+install.packages("tidyverse")
 library(tidyverse)
 
 spahn <- read_csv("data/spahn.csv")
+
 spahn %>% slice(1:3) %>% select(1:10)
 spahn %>% slice(1:10) %>% select(Age, W, L, ERA)
+
 spahn %>%
   summarize(LO = min(ERA),
             QL = quantile(ERA, .25), QU = quantile(ERA, .75),
             M = median(ERA), HI = max(ERA))
+
 spahn %>% filter(ERA == min(ERA)) %>% select(Age)
+
 spahn %>%
   mutate(FIP = (13 * HR + 3 * BB - 2 * SO) / IP) -> spahn
+
 spahn %>%
   arrange(FIP) %>%
   select(Year, Age, W, L, ERA, FIP) %>%
   head()
 
-
 spahn %>% filter(Tm == "BSN" | Tm == "MLN") -> spahn1
+
 spahn1 <- spahn1 %>%
   mutate(Tm = factor(Tm, levels = c("BSN", "MLN")))
+
 spahn1 %>%
   group_by(Tm) %>%
   summarize(mean_W.L = mean(W.L, na.rm = TRUE),
@@ -47,8 +54,10 @@ Year
 Year <- 1946 : 1952
 Age <- Year - 1921
 plot(Age, Win.Pct)
+
 mean(Win.Pct)
 100 * sum(W) / (sum(W) + sum(L))
+
 sort(W)
 cumsum(W)
 summary(Win.Pct)
@@ -103,7 +112,6 @@ WS_results %>%
 world_series <- list(Winner = Winner, Number.Games = N_Games,
                      Seasons = "2008 to 2017")
 world_series$Number.Games
-
 world_series[[2]]
 pluck(world_series, "Number.Games")
 world_series["Number.Games"]
@@ -114,7 +122,7 @@ pull(WS_results, NL_Team)
 library(Lahman)
 ws <- filter(SeriesPost, yearID >= 1903,
              round == "WS", wins + losses < 8)
-crcblue <- "#2905a1" #add
+crcblue <- "#2905a1"
 ggplot(ws, aes(x = wins + losses)) +
   geom_bar(fill = crcblue) +
   labs(x = "Number of games", y = "Frequency")
@@ -126,12 +134,13 @@ hr_rates <- function(age, hr, ab){
   list(x = age, y = rates)
 }
 source("scripts/hr_rates.R")
+
 HR <- c(13, 23, 21, 27, 37, 52, 34, 42, 31, 40, 54)
 AB <- c(341, 549, 461, 543, 517, 533, 474, 519, 541, 527, 514)
 Age <- 19 : 29
 hr_rates(Age, HR, AB)
-
 plot(hr_rates(Age, HR, AB))
+
 getwd()
 spahn <- read_csv("data/spahn.csv")
 HR <- c(13, 23, 21, 27, 37, 52, 34, 42, 31, 40, 54)
@@ -145,6 +154,7 @@ list.files("data", pattern = "mantle")
 install.packages("Lahman")
 library(Lahman)
 ?Batting
+
 Batting %>%
   filter(yearID >= 1960, yearID <= 1969) -> Batting_60
 Batting_60 %>%

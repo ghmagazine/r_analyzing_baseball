@@ -1,7 +1,9 @@
+# 1章
 install.packages("Lahman")
-library(Lahman) #add
+library(Lahman)
 
-Master %>%
-  head(1)
-head(Master, 1) #add
-
+head(Master, 1)
+head(Batting)
+head(Pitching)
+head(Fielding)
+head(Teams)

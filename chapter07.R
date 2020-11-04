@@ -1,10 +1,20 @@
+# 7章
 library(tidyverse)
 db <- src_sqlite("data/pitchrx.sqlite", create = TRUE)
 library(pitchRx)
 files <- c("inning/inning_all.xml", "inning/inning_hit.xml",
            "miniscoreboard.xml", "players.xml")
 scrape(start = "2016-05-01", end = "2016-05-31",
-       connect = db$con, suffix = files) # error
+       connect = db$con, suffix = files)
+
+#### エラーになる場合は代わりに別のパッケージを使ってください
+devtools::install_github("pontsuyu/pitchRx2")
+library(pitchRx2)
+gids <- game_ids %>% str_subset("gid_2016_05_.*")
+scrape_inning_all(gids = gids, db_name = "data/pitchrx")
+db <- src_sqlite("data/pitchrx.sqlite3")
+#########
+
 db_list_tables(db$con)
 my_pitches <- db %>%
   tbl("pitch") %>%
@@ -25,12 +35,12 @@ k_zone_plot <- ggplot(NULL, aes(x = px, y = pz)) +
 
 k_zone_plot %+% sample_n(my_pitches, 10000) +
   aes(color = type) +
-  geom_point(alpha = 0.1) +
-  scale_color_manual(values = c(crcblue, "white", "black"))
+  geom_point(alpha = 0.1)
+  # scale_color_manual(values = c(crcblue, "white", "black"))
 taken <- my_pitches %>%
   filter(type != "X")
 zones <- taken %>%
-  group_by(zone) %>%
+  group_by(zone) %>% # 2020年11月時点ではzoneが取得できないようになっている...
   summarize(
     N = n(),
     right_edge = min(1.5, max(px)),
@@ -98,8 +108,6 @@ diffs <- hand_grid_hats %>%
   group_by(px, pz) %>%
   summarize(N = n(), .fitted = sd(.fitted))
 tile_plot %+% diffs
-
-
 
 sc_2017 <- read_csv("data/statcast2017.csv")
 set.seed(111653)

@@ -1,3 +1,4 @@
+# 3章
 library(tidyverse)
 hof <- read_csv("data/hofbatting.csv")
 hof <- hof %>%
@@ -11,6 +12,7 @@ hof <- hof %>%
                               "Long Ball")))
 hof_eras <- summarize(group_by(hof, Era), N = n())
 hof_eras
+
 ggplot(hof, aes(x = Era)) + geom_bar()
 ggplot(hof, aes(Era)) +
   geom_bar() +
@@ -43,11 +45,11 @@ ggplot(hof, aes(x = OPS, y = 1)) +
   coord_fixed(ratio = 0.03)
 ggplot(hof, aes(x = OPS)) +
   geom_histogram()
-crcblue <- "#2905a1" #add
+
+crcblue <- "#2905a1"
 ggplot(hof, aes(x = OPS)) +
   geom_histogram(breaks = seq(0.4, 1.2, by = 0.1),
                  color = crcblue, fill = "white")
-
 ggplot(hof, aes(MidCareer, OPS)) +
   geom_point() +
   geom_smooth()
@@ -88,6 +90,7 @@ ggplot(hof, aes(hr_rate, Era)) +
 ggplot(hof, aes(Era, hr_rate)) +
   geom_boxplot() + coord_flip()
 
+library(Lahman)
 get_birthyear <- function(Name){
   Names <- unlist(strsplit(Name, " "))
   Master %>%

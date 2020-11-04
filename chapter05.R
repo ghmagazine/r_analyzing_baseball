@@ -1,17 +1,17 @@
+# 5章
 library(tidyverse)
 library(Lahman)
 fields <- read_csv("data/fields.csv")
 data2016 <- read_csv("data/all2016.csv",
                      col_names = pull(fields, Header),
                      na = character())
-
 data2016 %>%
   mutate(RUNS = AWAY_SCORE_CT + HOME_SCORE_CT,
          HALF.INNING = paste(GAME_ID, INN_CT, BAT_HOME_ID),
          RUNS.SCORED =
            (BAT_DEST_ID > 3) + (RUN1_DEST_ID > 3) +
-           (RUN2_DEST_ID > 3) + (RUN3_DEST_ID > 3)) -> data2016
-data2016
+           (RUN2_DEST_ID > 3) + (RUN3_DEST_ID > 3)) ->
+  data2016
 
 data2016 %>%
   group_by(HALF.INNING) %>%
@@ -79,6 +79,7 @@ data2016 %>%
   replace_na(list(Runs.New.State = 0)) %>%
   mutate(run_value = Runs.New.State - Runs.State +
            RUNS.SCORED) -> data2016
+
 Master %>%
   filter(nameFirst == "Jose", nameLast == "Altuve") %>%
   pull(retroID) -> altuve.id
@@ -91,6 +92,7 @@ altuve %>%
 altuve %>%
   group_by(BASES) %>%
   summarize(N = n())
+crcblue <- "#2905a1"
 ggplot(altuve, aes(BASES, run_value)) +
   geom_jitter(width = 0.25, alpha = 0.5) +
   geom_hline(yintercept = 0, color = crcblue) +
@@ -172,7 +174,7 @@ ggplot(singles, aes(run_value)) +
   geom_vline(data = mean_singles, color = crcblue,
              aes(xintercept = mean_run_value), size = 1.5) +
   annotate("text", 0.8, 4000,
-           label = "Mean Run \ nValue", color = crcblue)
+           label = "Mean Run \n Value", color = crcblue)
 singles %>%
   select(STATE) %>%
   table()
@@ -184,6 +186,7 @@ singles %>%
   arrange(run_value) %>%
   select(STATE, NEW.STATE, run_value) %>%
   slice(1)
+
 data2016 %>%
   filter(EVENT_CD %in% c(4, 6)) -> stealing
 stealing %>%
