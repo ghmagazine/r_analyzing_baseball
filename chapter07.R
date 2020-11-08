@@ -36,7 +36,7 @@ k_zone_plot <- ggplot(NULL, aes(x = px, y = pz)) +
 k_zone_plot %+% sample_n(my_pitches, 10000) +
   aes(color = type) +
   geom_point(alpha = 0.1)
-  # scale_color_manual(values = c(crcblue, "white", "black"))
+# scale_color_manual(values = c(crcblue, "white", "black"))
 taken <- my_pitches %>%
   filter(type != "X")
 zones <- taken %>%
@@ -109,7 +109,9 @@ diffs <- hand_grid_hats %>%
   summarize(N = n(), .fitted = sd(.fitted))
 tile_plot %+% diffs
 
-sc_2017 <- read_csv("data/statcast2017.csv")
+sc_2017 <- read_csv("data/statcast2017.csv") %>% 
+  mutate(plate_x = as.numeric(plate_x),
+         plate_z = as.numeric(plate_z))
 set.seed(111653)
 sc_taken <- sc_2017 %>%
   filter(type != "X") %>%
@@ -119,8 +121,9 @@ sc_taken <- sc_2017 %>%
                                type = "response"))
 
 library(lme4)
-mod_a <- glmer(type == "S" ~ strike_prob + (1|pos2_person_id),
+mod_a <- glmer(type == "S" ~ strike_prob + (1|fielder_2),
                data = sc_taken, family = binomial)
+
 tidy(mod_a, effects = "fixed")
 tidy(mod_a, effects = "ran_pars")
 
@@ -139,14 +142,14 @@ c_effects <- c_effects %>%
 c_effects %>% head()
 c_effects %>% tail()
 
-mod_b <- glmer(type == "S" ~ strike_prob + (1|pos2_person_id) +
+mod_b <- glmer(type == "S" ~ strike_prob + (1|fielder_2) +
                  (1|batter) + (1|pitcher),
                data = sc_taken, family = binomial)
 tidy(mod_b, effects = "ran_pars")
 c_effects <- mod_b %>%
   ranef() %>%
   as_tibble() %>%
-  filter(grpvar == "pos2_person_id") %>%
+  filter(grpvar == "fielder_2") %>%
   transmute(id = as.numeric(as.character(grp)),
             effect = condval)
 c_effects <- c_effects %>%
@@ -155,8 +158,3 @@ c_effects <- c_effects %>%
   arrange(desc(effect))
 c_effects %>% head()
 c_effects %>% tail()
-
-
-
-
-
