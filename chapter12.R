@@ -53,10 +53,12 @@ sc_2017 <- db %>%
   tbl("statcast") %>%
   collect()
 write_csv(sc_2017, path = "data/statcast2017.csv")
+# make_statcast2017.Rを使用して作成したデータでも問題ありません
 
 sc_2017 <- read_csv("data/statcast2017.csv")
 sc_bips <- sc_2017 %>%
-  filter(type == "X", game_type == "R")
+  filter(type == "X", game_type == "R") %>% 
+  mutate(estimated_woba_using_speedangle = as.numeric(estimated_woba_using_speedangle))
 left_handed_batters <- sc_bips %>%
   group_by(batter, player_name) %>%
   summarize(N = n(), Stand = mean(stand == "L")) %>%
