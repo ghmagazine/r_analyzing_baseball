@@ -149,6 +149,7 @@ clump_test <- function(data, playerid) {
 }
 clump_test(data2016, "troum001")
 
+# make_statcast2017.Rでデータを作成してください
 statcast2017 <- read_csv("data/statcast2017.csv") %>% 
   mutate(launch_speed = as.numeric(launch_speed),
          launch_angle = as.numeric(launch_angle))
