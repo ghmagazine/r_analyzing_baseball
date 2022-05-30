@@ -1,7 +1,7 @@
 # 8章
 library(tidyverse)
 library(Lahman)
-Master %>%
+People %>%
   filter(nameFirst == "Mickey", nameLast == "Mantle") %>%
   pull(playerID) -> mantle_id
 batting <- Batting %>%
@@ -10,7 +10,7 @@ batting <- Batting %>%
 get_stats <- function(player.id){
   batting %>%
     filter(playerID == player.id) %>%
-    inner_join(Master, by = "playerID") %>%
+    inner_join(People, by = "playerID") %>%
     mutate(birthyear = ifelse(birthMonth >= 7, birthYear + 1, birthYear),
            Age = yearID - birthyear,
            SLG = (H - X2B - X3B - HR + 2 * X2B + 3 * X3B + 4 * HR) / AB,
@@ -116,7 +116,7 @@ batting_2000 %>%
          OPS = SLG + OBP) -> batting_2000
 
 batting_2000 %>%
-  inner_join(Master, by = "playerID") %>%
+  inner_join(People, by = "playerID") %>%
   mutate(Birthyear = ifelse(birthMonth >= 7,
                             birthYear + 1, birthYear),
          Age = yearID - Birthyear) -> batting_2000
@@ -124,7 +124,7 @@ batting_2000 %>% drop_na(Age) -> batting_2000
 
 plot_trajectories <- function(player, n.similar = 5, ncol){
   flnames <- unlist(strsplit(player, " "))
-  Master %>%
+  People %>%
     filter(nameFirst == flnames[1],
            nameLast == flnames[2]) %>%
     select(playerID) -> player
@@ -216,7 +216,7 @@ models %>%
 beta_estimates %>%
   filter(Position %in%
            c("1B", "2B", "3B", "SS", "C", "OF")) %>%
-  inner_join(Master) -> beta_fielders
+  inner_join(People) -> beta_fielders
 ggplot(beta_fielders, aes(Position, Peak.age)) +
   geom_jitter(width = 0.2) + ylim(20, 40) +
   geom_label_repel(data = filter(beta_fielders, Peak.age > 37),

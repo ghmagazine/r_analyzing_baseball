@@ -93,7 +93,7 @@ ggplot(hof, aes(Era, hr_rate)) +
 library(Lahman)
 get_birthyear <- function(Name){
   Names <- unlist(strsplit(Name, " "))
-  Master %>%
+  People %>%
     filter(nameFirst == Names[1],
            nameLast == Names[2]) %>%
     mutate(birthyear = ifelse(birthMonth >= 7,
@@ -118,10 +118,10 @@ ggplot(HRdata, aes(x = Age, y = CHR, linetype = Player)) +
 fields <- read_csv("data/fields.csv")
 data1998 <- read_csv("data/all1998.csv",
                      col_names = pull(fields, Header))
-sosa_id <- Master %>%
+sosa_id <- People %>%
   filter(nameFirst == "Sammy", nameLast == "Sosa") %>%
   pull(retroID)
-mac_id <- Master %>%
+mac_id <- People %>%
   filter(nameFirst == "Mark", nameLast == "McGwire") %>%
   pull(retroID)
 hr_race <- data1998 %>%
@@ -139,7 +139,7 @@ cum_hr <- function(d){
 hr_ytd <- hr_race %>%
   split(pull(., BAT_ID)) %>%
   map_df(cum_hr, .id = "BAT_ID") %>%
-  inner_join(Master, by = c("BAT_ID" = "retroID"))
+  inner_join(People, by = c("BAT_ID" = "retroID"))
 ggplot(hr_ytd, aes(Date, cumHR, linetype = nameLast)) +
   geom_line() +
   geom_hline(yintercept = 62, color = crcblue) +

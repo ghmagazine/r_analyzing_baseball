@@ -80,7 +80,7 @@ data2016 %>%
   mutate(run_value = Runs.New.State - Runs.State +
            RUNS.SCORED) -> data2016
 
-Master %>%
+People %>%
   filter(nameFirst == "Jose", nameLast == "Altuve") %>%
   pull(retroID) -> altuve.id
 data2016 %>%
@@ -119,7 +119,7 @@ ggplot(runs400, aes(Runs.Start, RE24)) +
   geom_hline(yintercept = 0, color = crcblue) -> plot1
 plot1
 runs400 %>%
-  inner_join(Master, by = c("BAT_ID" = "retroID")) -> runs400
+  inner_join(People, by = c("BAT_ID" = "retroID")) -> runs400
 library(ggrepel)
 plot1 +
   geom_text_repel(data = filter(runs400, RE24 >= 40),
@@ -211,3 +211,4 @@ stealing.1001 %>%
   summarize(N = n()) %>%
   mutate(pct = N / sum(N))
 stealing.1001 %>% summarize(Mean = mean(run_value))
+
