@@ -1,6 +1,7 @@
 # 付録A
+library(tidyverse)
 source("scripts/parse_retrosheet_pbp.R")
-parse_retrosheet_pbp(1950)
+parse_retrosheet_pbp(1950) # 実行して出来たcsvをdataフォルダに移動してください
 fields <- read_csv("data/fields.csv")
 data <- read_csv("data/all1950.csv",
                  col_names = pull(fields, Header))
